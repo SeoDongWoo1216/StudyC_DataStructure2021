@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="2-15_재귀호출과 하노이탑.c">
+    <ClCompile Include="Node2.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
