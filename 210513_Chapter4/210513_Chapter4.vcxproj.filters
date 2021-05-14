@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Node2.c">
+    <ClCompile Include="단방향연결리스트.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

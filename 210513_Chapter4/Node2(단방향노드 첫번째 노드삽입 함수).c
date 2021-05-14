@@ -26,7 +26,7 @@ void printNode(Node* curr)
 	}
 }
 
-void freeNode(Node* curr) 
+void delNode(Node* curr) 
 {
 	Node* temp;
 	for (curr; curr != NULL; curr->link)
@@ -51,7 +51,7 @@ int main()
 
 	printNode(head);
 
-	freeNode(head);
+	delNode(head);
 
 	return 0;
 }
