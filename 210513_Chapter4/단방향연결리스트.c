@@ -1,16 +1,12 @@
 /*
 전위로 노드를 삽입하는 형태
-
-노드의 데이터를 출력 : 헤드노드가 첫번째 노드를 가리켜서 하나씩 순회시켜서 출력했음.
-
+노드 데이터 출력 : 헤드노드가 첫번째 노드를 가리켜서 하나씩 순회시켜서 출력했음.
 역참조 : NULL이 h를 가리키는 경우 (반대로 가리키는거)
-
 단일연결리스트(단방향)
-
 노드를 서로가리키는게 서로 양방향연결리스트
-
 맨끝에있는게 맨앞을 가리키면 원형연결리스트
 */
+
 
 // 노드를 검색, 노드를 삭제, 노드를 해제하는 함수를 이용하여 단방향 연결리스트를 만들어보자.
 #include <stdio.h>
@@ -34,7 +30,7 @@ void rearInsertNode(HeadNode* h, int data); // 노드 후위 삽입 함수
 void print_Node(HeadNode* h);               // 노드 출력 함수
 void delAllNode(HeadNode* h);               // 모든 노드 삭제 함수
 Node* searchNode(HeadNode* h, int data);    // 특정 노드 검색 함수
-Node* delNode(HeadNode* h, Node* temp);     // 특정 노드 삭제 함수(searchNode에서 검색한 노드를 삭제)
+void delNode(HeadNode* h, Node* temp);      // 특정 노드 삭제 함수(searchNode에서 검색한 노드를 삭제)
 
 
 int main()
@@ -43,17 +39,17 @@ int main()
 
 	// 전위
 	preInsertNode(h, 10);
-	//preInsertNode(h, 20);
-	//preInsertNode(h, 30);
+	preInsertNode(h, 20);
+	preInsertNode(h, 30);
 
-	//// 후위
-	//rearInsertNode(h, 40);
-	//rearInsertNode(h, 50);
-	//rearInsertNode(h, 60);
+	// 후위
+	rearInsertNode(h, 40);
+	rearInsertNode(h, 50);
+	rearInsertNode(h, 60);
 
-	// print_Node(h);  // 노드 생성이 잘됬는지 확인할 출력문
+	print_Node(h);  // 노드 생성이 잘됬는지 확인할 출력문
 
-	Node* temp = searchNode(h, 10);  // 검색한 노드를 temp에 넣음
+	Node* temp = searchNode(h, 40);  // 검색한 노드를 temp에 넣음
 	 
 	delNode(h, temp);   // 검색한 노드를 삭제
 
@@ -181,16 +177,16 @@ Node* searchNode(HeadNode* h, int data)
 {
 	Node* s = h->head;          // 검색할 노드 s 선언
 	int i = 1;
-	while (s != NULL) 
+	while (s != NULL)           
 	{
-		if (s->data == data) 
+		if (s->data == data)    // 검색할 노드의 data값과 매개변수로 받은 data값이 같을때
 		{
 			printf("찾은 값 : %d번째 %d\n", i, s->data);
 			return s;
 		}
-		else 
+		else                    // 검색한 노드가아니면 다음 노드로 넘어감
 		{
-			s = s->next;
+			s = s->next;        // 증감식의 역할
 			i++;
 		}
 	}
@@ -201,7 +197,7 @@ Node* searchNode(HeadNode* h, int data)
 /// <summary>
 /// 특정 노드 삭제 함수(main에서 검색했던 노드를 삭제하는 함수)
 /// </summary>
-Node* delNode(HeadNode* h, Node* temp)
+void delNode(HeadNode* h, Node* temp)
 {
 	Node* curr;
 	if (h == NULL)
@@ -216,18 +212,18 @@ Node* delNode(HeadNode* h, Node* temp)
 	}
 	else if (h->head->next == NULL)  // 노드가 한개있을때(한개 있는 노드 다음이 NULL이므로 노드의 next값이 NULL이 나올것임)
 	{
-		h->head = h->head->next;
-		free(temp);
+		h->head = h->head->next;     // head에 주소값에 다음 노드의 주소값 삽입(NULL삽입)
+		free(temp);         
 		return;
 	}
-	else
+	else                             // 노드가 2개 이상일때
 	{
 		curr = h->head;
-		if (curr == temp)
+		if (curr == temp)            // 삭제하려는 노드가 head 다음 노드일때
 		{
-			h->head = temp->next;
-			free(temp);
-			temp = NULL;
+			h->head = temp->next;    // 다음노드의 주소를 head의 주소로 저장
+			free(temp);              
+			// temp = NULL;
 			return;
 		}
 
