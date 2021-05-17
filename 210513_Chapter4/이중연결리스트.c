@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 typedef struct dlistnode   // 이중연결리스트 구조체
 {
 	int data;
@@ -22,13 +23,14 @@ typedef struct // 헤드 노드의 구조체
 }HeadNode;
 
 
-HeadNode* createHeadNode();   // 헤드 생성 함수
-DListnode* createNode(int data);  // 노드 생성 함수(데이터만넣고 가리키는 값은 초기화)
-void linkNode(HeadNode* phead, DListnode* preNode, DListnode* newNode); // 노드 삽입 함수
-void printfNode(HeadNode*);
-void allDelNode(HeadNode* phead);
-DListnode* findNode(HeadNode*, int data);
-DListnode DelNode(HeadNode* phead, DListnode* temp);
+HeadNode* createHeadNode();                          // 헤드 생성 함수
+DListnode* createNode(int );                         // 노드 생성 함수(데이터만넣고 가리키는 값은 초기화)
+void linkNode(HeadNode* , DListnode* , DListnode* ); // 노드 삽입 함수
+void printfNode(HeadNode*);                          // 노드 출력 함수
+void allDelNode(HeadNode* );                         // 모든 노드 삭제 함수
+DListnode* findNode(HeadNode*, int );                // 노드 검색 함수
+DListnode DelNode(HeadNode* , DListnode* );          // 검색된 노드를 삭제하는 함수
+
 
 int main()
 {
@@ -68,9 +70,9 @@ int main()
 
 	printf("\n");
 
-	DelNode(phead, temp);  // 검색한 노드를 삭제하는 함수
+	DelNode(phead, temp);                    // 검색한 노드(data : 30)를 삭제하는 함수
 
-	printfNode(phead);     // 삭제가 잘 됬는지 다시 노드를 출력
+	printfNode(phead);                       // 삭제가 잘 됬는지 다시 노드를 출력
 
 	return 0;
 }
@@ -147,8 +149,6 @@ void linkNode(HeadNode* phead, DListnode* preNode, DListnode* newNode)
 			}
 			preNode->next = newNode;
 		}
-
-		
 	}
 }
 
@@ -203,19 +203,19 @@ void allDelNode(HeadNode* phead)
 /// </summary>
 DListnode* findNode(HeadNode* phead, int data)
 {
-	DListnode* curr = phead->head;
+	DListnode* curr = phead->head;         // 검색용 임시 변수 선언
 	int i = 1;
 	
 	while (curr != NULL)
 	{
-		if (curr->data == data)
+		if (curr->data == data)            // 매개변수로 받은 data와 curr를 돌리면서 찾은 curr->data가 같을때
 		{
 			printf("%d번째로 찾은 데이터 : %d\n", i, curr->data);
 			return curr;
 		}
 		else
 		{
-			curr = curr->next;
+			curr = curr->next;             // 다음 curr을 찾기위한 증감식
 			i++;
 		}
 	}
@@ -229,13 +229,13 @@ DListnode* findNode(HeadNode* phead, int data)
 DListnode DelNode(HeadNode* phead, DListnode* temp) 
 {
 	DListnode* curr = phead->head;
-	if (curr == NULL) 
+	if (curr == NULL)                     // 노드가 NULL일때
 	{
 		printf("삭제할 노드가 없습니다.\n");
 		return;
 	}
 
-	if (temp == NULL) 
+	if (temp == NULL)                     // 검색했을때 해당되는 노드가 없을때
 	{
 		printf("검색된 노드가 없어서 삭제할 노드가 없습니다.\n");
 	}
@@ -255,7 +255,7 @@ DListnode DelNode(HeadNode* phead, DListnode* temp)
 		{
 			if (temp->next == NULL)               // 삭제하려는 노드가 맨 마지막 노드일때
 			{
-				temp->prev->next = NULL;
+				temp->prev->next = NULL;          // 현재 노드의 prev, 즉 전 노드의 next값을 NULL로 삽입
 				free(temp);
 				return;
 			}
@@ -265,14 +265,10 @@ DListnode DelNode(HeadNode* phead, DListnode* temp)
 				{
 					curr = curr->next;
 				}
-				curr->next = temp->next;          // 
-				temp->next->prev = temp->prev;
+				curr->next = temp->next;          // 그 전 노드의 next를 현재 next로 바꿈
+				temp->next->prev = temp->prev;    // 현재 노드의 next, 즉 다음 노드의 prev 값을 지금 노드의 prev 값으로 바꿔줌
 				free(temp);
 			}
-
-			
 		}
-
-		
 	}
 }

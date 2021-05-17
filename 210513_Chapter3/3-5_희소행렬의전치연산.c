@@ -60,5 +60,5 @@ void main()
 	smTranpose(x, y);
 
 	getchar();
-	return 0;
+	//return 0;
 }
