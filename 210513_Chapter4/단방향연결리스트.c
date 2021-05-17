@@ -5,10 +5,12 @@
 단일연결리스트(단방향)
 노드를 서로가리키는게 서로 양방향연결리스트
 맨끝에있는게 맨앞을 가리키면 원형연결리스트
+=> 단일연결리스트가 잘되어야 이중과 원형이 잘된다.
 */
 
 
-// 노드를 검색, 노드를 삭제, 노드를 해제하는 함수를 이용하여 단방향 연결리스트를 만들어보자.
+// ~05-16 : 노드를 검색, 노드를 삭제, 노드를 해제하는 함수를 이용하여 단방향 연결리스트를 만들어보자.
+// 0517 : 중간노드 삽입을 만들어보자(입력값으로 헤드, 노드1개(앞노드), 데이터를 넣으면됨)
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -24,13 +26,15 @@ typedef struct          // 헤드는 첫번째 노드를 가리키는 역할(★헤드가 가리키는�
 }HeadNode;
 
 
-HeadNode* createHead(void);                 // 헤더 생성 함수
+HeadNode* createHead(void);                 // 헤드 생성 함수
 void preInsertNode(HeadNode* h, int data);  // 노드 전위 삽입 함수
 void rearInsertNode(HeadNode* h, int data); // 노드 후위 삽입 함수
 void print_Node(HeadNode* h);               // 노드 출력 함수
 void delAllNode(HeadNode* h);               // 모든 노드 삭제 함수
 Node* searchNode(HeadNode* h, int data);    // 특정 노드 검색 함수
 void delNode(HeadNode* h, Node* temp);      // 특정 노드 삭제 함수(searchNode에서 검색한 노드를 삭제)
+void midInsertNode(HeadNode*, Node* pn, int data);
+
 
 
 int main()
@@ -44,16 +48,18 @@ int main()
 
 	// 후위
 	rearInsertNode(h, 40);
-	rearInsertNode(h, 50);
 	rearInsertNode(h, 60);
+	rearInsertNode(h, 70);
 
 	print_Node(h);  // 노드 생성이 잘됬는지 확인할 출력문
 
 	Node* temp = searchNode(h, 40);  // 검색한 노드를 temp에 넣음
 	 
-	delNode(h, temp);   // 검색한 노드를 삭제
+	// delNode(h, temp);   // 검색한 노드를 삭제
 
 	// delAllNode(h);   // 노드 전체 삭제
+
+	midInsertNode(h, temp, 50);
 
 	print_Node(h);      // 삭제후에 노드의 상태가 어떤지 다시 확인하기위한 출력문
 
@@ -236,3 +242,32 @@ void delNode(HeadNode* h, Node* temp)
 	}
 }
 
+/// <summary>
+/// 중간 노드 삽입 함수 (검색된 노드 다음에 삽입)
+/// </summary>
+void midInsertNode(HeadNode* h, Node* pn, int data) 
+{
+	Node* newNode = (Node*)malloc(sizeof(Node));
+
+	if (newNode != NULL) 
+	{
+		newNode->data = data;
+		newNode->next = NULL;
+		if (h->head == NULL)     // 노드가 헤드 1개밖에 없을때 => 그냥 노드를 새로 생성하면됨
+		{ 
+			h->head = newNode;   // 헤드의 next를 newNode로 넣어줌 (노드가 ㅁ->ㅁ처럼 2개가됨)
+		}
+
+		else if (pn == NULL)     // pn이 맨 마지막 노드일때
+		{
+			printf("삽입할 위치를 찾을 수 없습니다.");
+		}
+
+		else   // 그 외에 정상일때(노드가 여러개이고, 삽입할 노드 전후로 1개씩 노드가있을때)
+		{
+			newNode->next = pn->next;  // 순서 매우 중요!
+			pn->next = newNode;        // 이 코드가 위에오면 계속 지자신 호출해서 무한루프됨
+		}
+		printf("%d추가합니다!\n", newNode->data);
+	}
+}
