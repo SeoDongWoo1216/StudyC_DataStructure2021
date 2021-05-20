@@ -1,6 +1,6 @@
 /*
 퀵정렬 : 대표적인 분할 정복 알고리즘(시간 복잡도가 제일 빠름)
-정렬되어있을때 퀵정렬을 사용하면 퀵정렬의 성능을 얻을 수 없다.
+정렬되어있을때 퀵정렬을 사용하면 퀵소트의 성능을 얻을 수 없다.
 정렬되있으면 삽입정렬이 더 빠름
 
 1. 원소들 중에서 pivot(기준)을 고른다.
@@ -16,27 +16,81 @@
 
 void quickSort(int*, int, int);
 
-int main() 
+int main()
 {
-	int ary[] = {3, 5, 2, 4, 7, 6, 1};
+	int ary[] = { 3, 5, 2, 4, 7, 6, 1, 8 };
 	int size = sizeof(ary) / sizeof(ary[0]);
+	printf("ary[] : 3, 5, 2, 4, 7, 6, 1, 8 \n\n");
+
 	quickSort(ary, 0, size - 1);
 
-	for (int i = 0; i < size; i++)
+
+	/*for (int i = 0; i < size; i++)
 	{
 		printf("%d  ", ary[i]);
 	}
-	printf("\n");
+	printf("\n");*/
 
 	return 0;
 }
 
+
 /// <summary>
 /// 퀵정렬 함수
 /// </summary>
-void quickSort(int* pary, int left, int right) 
+void quickSort(int* pary, int left, int right)
 {
-	if (left >= right)
+	int lidx = left;     // lidx = left = 0
+	int ridx = right;    // ridx = right = size - 1   ( lidx, ridx 는 index를 나타냄.)
+	int temp;
+	int pivot = (left + right) / 2;  //  (n/2)로 피봇 설정
+
+	printf("pivot - index : %d, value : %d\n", pivot, pary[pivot]);
+
+	while (lidx <= ridx)                   // lidx와 ridx가 교차되기 전까지 실행
+	{
+		while (pary[lidx] < pary[pivot])   // 피봇의 왼쪽 리스트 중 작은 값은 통과
+		{
+			lidx++;
+		}
+		while (pary[ridx] > pary[pivot])   // 피봇의 오른쪽 리스트 중 큰 값은 통과
+		{
+			ridx--;
+		}
+		if (lidx <= ridx)                  // 정렬할 조건이 되면(lidx == ridx이면 피봇값이다)
+		{
+			temp = pary[ridx];             // 정렬 알고리즘
+			pary[ridx] = pary[lidx];
+			pary[lidx] = temp;
+			printf("%d : %d\n", temp, pary[ridx]);
+			lidx++;
+			ridx--;
+		}
+	}
+	for (int i = 0; i <= right; i++) 
+	{
+		printf("%3d", pary[i]);
+	}
+	printf("\n");
+
+	if (left < ridx) 
+	{
+		quickSort(pary, left, ridx);       // 피봇기준 왼쪽값 정렬
+	}
+
+	if (lidx < right) 
+	{
+		quickSort(pary, lidx, right);      // 피봇기준 오른쪽값 정렬
+	}
+}
+
+
+
+
+
+/*
+// 수업시간에 했던거
+if (left >= right)
 	{
 		return;
 	}
@@ -50,44 +104,42 @@ void quickSort(int* pary, int left, int right)
 
 		while (pary[lleft] <= pary[pivot])   // 왼쪽값이 피봇보다 작다 => 정렬이 되었다. => lleft를 이동
 		{
-			lleft++;   // 왼족에서 오른쪽이동이니 ++을 해줌
+			lleft++;   // 왼쪽에서 오른쪽이동이니 ++을 해줌
 		}
-		while (pary[lright] >= pary[pivot] && lright > left)  
+		while (pary[lright] >= pary[pivot] && lright > left)
 		// 오른쪽값이 피봇보다 크다 => 정렬이 되었다. => lright를 이동
-        // && lright 오른쪽 인덱스 끝에서 왼쪽으로 이동할때 배열 크기를 벗어나지 않게해주는 조건(lright가 음수가 되지않도록 해줌)
+	   // && lright 오른쪽 인덱스 끝에서 왼쪽으로 이동할때 배열 크기를 벗어나지 않게해주는 조건(lright가 음수가 되지않도록 해줌)
 
 		{
 			lright--;  // 오른쪽에서 왼쪽이동이니 --를 해줌
 		}
 
-		if (lleft > lright)   // 오른쪽과 왼쪽애가 교체됬을때 => 
+		if (lleft > lright)   // 오른쪽과 왼쪽애가 교체됬을때
 		{
 			temp = pary[lright];           // 작은값과 피봇을 교체해줌
-			pary[lright] = pary[pivot];    
+			pary[lright] = pary[pivot];
 			pary[pivot] = temp;
 		}
-		else                  // 교체를 안했을때  
+		else                  // 교체를 안했을때
 		{
 			temp = pary[lright];
 			pary[lright] = pary[lleft];
 			pary[lleft] = temp;
 		}
 		// 단계별로 정렬되는지 확인하려는 출력문
-		for (i = 0; i < right + 1; i++)
+		for (i = 0; i <= right; i++)
 		{
 			printf("%d  ", pary[i]);
 		}
 		printf("\n");
 	}
 
-	
-	
+
 	quickSort(pary, left, lright - 1);   // while문을 빠져나온 후에 왼쪽을 정렬하는 형태(키의 왼쪽)
-	
+
 	quickSort(pary, lright + 1, right);   // 피봇을 기준으로 오른쪽을 정렬(키의 오른쪽)
-}
 
-
+*/
 
 /*
 왼쪽에서 오른쪽으로갈때는 인덱스가 더 큰 걸 찾음
